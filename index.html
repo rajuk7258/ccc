@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enhanced Calendar Notes</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff"/>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      max-width: 600px;
+      margin-inline: auto;
+    }
+    h1, h2 { text-align: center; }
+    .calendar-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-top: 15px;
+    }
+    .day {
+      padding: 15px;
+      background-color: #f0f0f0;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 6px;
+      min-height: 50px;
+      transition: background 0.2s;
+    }
+    .day:hover { background-color: #d0ebff; }
+    .day[data-has-note="true"] { background-color: #ffeeba; }
+    #note-section { margin-top: 30px; display: none; }
+    textarea {
+      width: 100%;
+      height: 100px;
+      font-size: 1em;
+      padding: 10px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 1em;
+    }
+    .note-preview {
+      margin-top: 10px;
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
+    .export-section { text-align: center; margin-top: 30px; }
+    @media (max-width: 600px) {
+      .calendar { grid-template-columns: repeat(7, 1fr); gap: 5px; }
+      .day { font-size: 0.85em; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="calendar-controls">
+    <button onclick="changeMonth(-1)">⬅️ Prev</button>
+    <h1 id="calendar-title"></h1>
+    <button onclick="changeMonth(1)">Next ➡️</button>
+  </div>
+  <div class="calendar" id="calendar-days"></div>
+  <div id="note-section">
+    <h2>Note for <span id="selected-date"></span></h2>
+    <textarea id="note-text" placeholder="Type your note here... ✍️😊🎯"></textarea>
+    <button onclick="saveNote()">💾 Save Note</button>
+    <div id="saved-note" class="note-preview"></div>
+  </div>
+  <div class="export-section">
+    <button onclick="exportAllNotes()">📁 Export All Notes</button>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service worker registered.', reg))
+          .catch(err => console.error('Service worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
